@@ -3,7 +3,7 @@
 FROM docker.io/alpine:3.18 as base
 
 # Build the web ui from source
-FROM --platform=$BUILDPLATFORM docker.io/node:18 AS build-node
+FROM --platform=$BUILDPLATFORM docker.io/node:20 AS build-node
 WORKDIR /exa
 ADD internal/web /exa/internal/web
 ADD Makefile /exa/
