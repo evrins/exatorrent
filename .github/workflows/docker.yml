@@ -1,13 +1,7 @@
 name: Create and publish Container images
 
-on:
-  push:
-    tags:
-      - v*
-
 jobs:
   build-container-images:
-    if: ${{ github.repository_owner }} == "varbhat"
     runs-on: ubuntu-latest
     permissions:
       contents: read
