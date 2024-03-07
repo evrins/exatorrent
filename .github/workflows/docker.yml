@@ -1,5 +1,8 @@
 name: Create and publish Container images
 
+on:
+  push
+
 jobs:
   build-container-images:
     runs-on: ubuntu-latest
