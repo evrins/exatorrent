@@ -14,7 +14,7 @@
       Clear All
     </button>
     {#each $resplist?.data as resp}
-      <div
+      <button
         class="bg-neutral-800 text-neutral-200 px-3 py-5 rounded-lg m-3 noHL"
         on:click={() => {
           if (typeof resp?.infohash === 'string' && resp?.infohash.length > 0) {
@@ -31,7 +31,7 @@
             {resp?.infohash ? `( ${resp?.infohash} )` : ''}
           </div>
         </div>
-      </div>
+      </button>
     {/each}
   {:else}
     <p class="text-xl text-center text-red-400 font-sans">No Notifications</p>

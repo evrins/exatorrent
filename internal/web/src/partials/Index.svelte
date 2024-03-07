@@ -116,7 +116,7 @@
 
 <div class="mx-auto max-w-xl">
   <div class="grid grid-flow-col grid-cols-2  mt-3">
-    <div
+    <button
       class="bg-neutral-800 text-neutral-200 px-5 py-5 rounded-lg m-3 cursor-pointer"
       on:click={() => {
         slocation.goto('/torrents');
@@ -125,8 +125,8 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
       </svg>
       Torrents
-    </div>
-    <div
+    </button>
+    <button
       class="bg-neutral-800 text-neutral-200 px-5 py-5 rounded-lg m-3 cursor-pointer"
       on:click={() => {
         slocation.goto('/settings');
@@ -140,11 +140,11 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
       Settings
-    </div>
+    </button>
   </div>
   {#if $isAdmin}
     <div class="grid grid-flow-col grid-cols-2  mt-3 cursor-pointer">
-      <div
+      <button
         class="bg-neutral-800 text-neutral-200 px-5 py-5 rounded-lg m-3"
         on:click={() => {
           slocation.goto('/users');
@@ -153,8 +153,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
         Users
-      </div>
-      <div
+      </button>
+      <button
         class="bg-neutral-800 text-neutral-200 px-5 py-5 rounded-lg m-3 cursor-pointer"
         on:click={() => {
           slocation.goto('/stats');
@@ -163,7 +163,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
         </svg>
         Stats
-      </div>
+      </button>
     </div>
   {/if}
 </div>

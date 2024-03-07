@@ -24,7 +24,7 @@
   <p class="text-center text-red-400 font-sans">Disconnected</p>
 
   <div class="grid grid-flow-col grid-cols-2  mt-3">
-    <div
+    <button
       class="bg-gradient-to-r from-green-900 to-green-700 text-neutral-200 px-5 py-5 rounded-lg m-3"
       title="reconnect"
       on:click={() => {
@@ -34,9 +34,9 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
       </svg>
       Reconnect
-    </div>
+    </button>
 
-    <div
+    <button
       class="bg-gradient-to-r from-red-700 to-red-500 text-neutral-200 px-5 py-5 rounded-lg m-3"
       title="signout"
       on:click={() => {
@@ -46,6 +46,6 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
       Sign Out
-    </div>
+    </button>
   </div>
 </div>

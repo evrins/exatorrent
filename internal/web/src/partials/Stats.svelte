@@ -44,9 +44,9 @@
 <div class="mx-auto max-w-xl">
   <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
     <div class="flex items-center justify-between flex-wrap py-1 px-3">
-      <div class="w-0 flex-1 flex items-center" on:click={devinfoaction}>
+      <button class="w-0 flex-1 flex items-center" on:click={devinfoaction}>
         <p class="ml-3 font-medium  truncate">Device Info</p>
-      </div>
+      </button>
 
       <button type="button" class="-mr-1 flex p-2 rounded-md bg-neutral-800 focus:outline-none flex-shrink-0 mx-1" on:click={devinfoaction}>
         {#if deviceinfoOpen === true}
@@ -82,9 +82,9 @@
 <div class="mx-auto max-w-xl">
   <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
     <div class="flex items-center justify-between flex-wrap py-1 px-3">
-      <div class="w-0 flex-1 flex items-center" on:click={devicestatsaction}>
+      <button class="w-0 flex-1 flex items-center" on:click={devicestatsaction}>
         <p class="ml-3 font-medium  truncate">Device Stats</p>
-      </div>
+      </button>
 
       {#if devicestatsOpen === true}
         <button
@@ -130,9 +130,9 @@
 <div class="mx-auto max-w-xl">
   <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
     <div class="flex items-center justify-between flex-wrap py-1 px-3">
-      <div class="w-0 flex-1 flex items-center" on:click={torcstatsaction}>
+      <button class="w-0 flex-1 flex items-center" on:click={torcstatsaction}>
         <p class="ml-3 font-medium  truncate">Torrent Client Status</p>
-      </div>
+      </button>
 
       {#if torcstatsOpen === true}
         <button

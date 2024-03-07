@@ -18,7 +18,7 @@
 <div class="mx-auto max-w-3xl ">
   {#if Array.isArray($torrentsforuser) && $torrentsforuser?.length}
     {#each $torrentsforuser as trnt (trnt)}
-      <div
+      <button
         class="bg-neutral-800 text-neutral-200 px-3 py-5 rounded-lg m-3 noHL"
         on:click={() => {
           if (typeof trnt === 'string' && trnt?.length > 0) {
@@ -28,7 +28,7 @@
         <div class="break-all mx-1 mb-1 font-bold">
           {trnt}
         </div>
-      </div>
+      </button>
     {/each}
   {:else}
     <p class="text-xl text-center text-red-400 font-sans">User owns no Torrents</p>

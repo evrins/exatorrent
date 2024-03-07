@@ -153,9 +153,9 @@
 <div class="mx-auto max-w-xl">
   <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
     <div class="flex items-center justify-between flex-wrap py-1 px-3">
-      <div class="w-0 flex-1 flex items-center" on:click={diskusageaction}>
+      <button class="w-0 flex-1 flex items-center" on:click={diskusageaction}>
         <p class="ml-3 font-medium  truncate">Disk Usage</p>
-      </div>
+      </button>
 
       {#if diskstatsOpen === true}
         <button
@@ -205,9 +205,9 @@
   <div class="mx-auto max-w-xl">
     <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
       <div class="flex items-center justify-between flex-wrap py-1 px-3">
-        <div class="w-0 flex-1 flex items-center" on:click={miscsettingsaction}>
+        <button class="w-0 flex-1 flex items-center" on:click={miscsettingsaction}>
           <p class="ml-3 font-medium  truncate">Misc Settings</p>
-        </div>
+        </button>
 
         {#if miscOpen === true}
           <button
@@ -306,9 +306,9 @@
   <div class="mx-auto max-w-xl ">
     <div class="bg-black grid grid-flow-row text-white rounded-lg m-3 p-2 cursor-pointer focus:outline-none focus-within:bg-black noHL">
       <div class="flex items-center justify-between flex-wrap py-1 px-3">
-        <div class="w-0 flex-1 flex items-center" on:click={enginesettingsOpen}>
+        <button class="w-0 flex-1 flex items-center" on:click={enginesettingsOpen}>
           <p class="ml-3 font-medium  truncate">Engine Settings</p>
-        </div>
+        </button>
 
         {#if engsettingsOpen === true}
           <button
