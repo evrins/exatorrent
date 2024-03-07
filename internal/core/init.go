@@ -325,7 +325,7 @@ func Initialize() {
 	}
 	for _, eachtrnt := range torlist {
 		go func(started bool, infohash metainfo.Hash) {
-			AddfromSpec("", &torrent.TorrentSpec{InfoHash: infohash}, true, true)
+			AddFromSpec("", &torrent.TorrentSpec{InfoHash: infohash}, true, true)
 			if started {
 				StartTorrent("", infohash, true)
 			}

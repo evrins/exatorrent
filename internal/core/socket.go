@@ -186,7 +186,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			var lt []metainfo.Hash = make([]metainfo.Hash, 0)
 			for _, file := range files {
 				if file.IsDir() {
-					tm, terr := MetafromHex(file.Name())
+					tm, terr := MetaFromHex(file.Name())
 					if terr != nil {
 						Warn.Println(terr)
 						Warn.Println("Non Torrent Directories found in ", Dirconfig.TrntDir, file, file.Name())
@@ -219,7 +219,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			var lt []metainfo.Hash = make([]metainfo.Hash, 0)
 			for _, file := range files {
 				if file.IsDir() {
-					tm, terr := MetafromHex(file.Name())
+					tm, terr := MetaFromHex(file.Name())
 					if terr != nil {
 						Warn.Println(terr)
 						Warn.Println("Non Torrent Directories found in ", Dirconfig.TrntDir, file, file.Name())
@@ -391,7 +391,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			_ = uc.SendMsg("resp", "success", "New Torrent Config File has been set successfully")
 			return
 		case "listusersfortorrent":
-			ih, err := MetafromHex(req.Data1)
+			ih, err := MetaFromHex(req.Data1)
 			if err != nil {
 				_ = uc.SendMsg("resp", "error", "listusersfortorrent: infohash couldn't be parsed "+req.Data1)
 				return
@@ -407,7 +407,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			_ = uc.SendMsg("resp", "success", "kicked "+req.Data1)
 			return
 		case "changedataload":
-			ih, err := MetafromHex(req.Data1)
+			ih, err := MetaFromHex(req.Data1)
 			if err != nil {
 				_ = uc.SendMsg("resp", "error", "stopfile: infohash couldn't be parsed "+req.Data1)
 				return
@@ -506,41 +506,41 @@ func wshandler(uc *UserConn, req *ConReq) {
 			return
 		}
 		if req.Data2 == "true" {
-			go AddfromSpec(uc.Username, tspec, true, false)
+			go AddFromSpec(uc.Username, tspec, true, false)
 		} else {
-			go AddfromSpec(uc.Username, tspec, false, false)
+			go AddFromSpec(uc.Username, tspec, false, false)
 		}
 		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "torrent spec added")
 		return
 	case "addtorrent":
-		tspec, terr := SpecfromB64String(req.Data1)
+		tspec, terr := SpecFromB64String(req.Data1)
 		if terr != nil {
 			_ = uc.SendMsg("resp", "error", "incorrect torrent spec")
 			return
 		}
 		if req.Data2 == "true" {
-			go AddfromSpec(uc.Username, tspec, true, false)
+			go AddFromSpec(uc.Username, tspec, true, false)
 		} else {
-			go AddfromSpec(uc.Username, tspec, false, false)
+			go AddFromSpec(uc.Username, tspec, false, false)
 		}
 		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "torrent spec added")
 		return
 	case "addinfohash":
-		ih, terr := MetafromHex(req.Data1)
+		ih, terr := MetaFromHex(req.Data1)
 		if terr != nil {
 			_ = uc.SendMsg("resp", "error", "incorrect Infohash")
 			return
 		}
 		tspec := &torrent.TorrentSpec{InfoHash: ih}
 		if req.Data2 == "true" {
-			go AddfromSpec(uc.Username, tspec, true, false)
+			go AddFromSpec(uc.Username, tspec, true, false)
 		} else {
-			go AddfromSpec(uc.Username, tspec, false, false)
+			go AddFromSpec(uc.Username, tspec, false, false)
 		}
 		_ = uc.SendMsgU("resp", "success", ih.HexString(), "torrent spec added")
 		return
 	case "starttorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "starttorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -552,7 +552,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		go StartTorrent(uc.Username, ih, false)
 		return
 	case "stoptorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "stoptorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -568,7 +568,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			_ = uc.SendMsg("resp", "error", "no path provided")
 			return
 		}
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "startfile: infohash couldn't be parsed "+req.Data1)
 			return
@@ -584,7 +584,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			_ = uc.SendMsg("resp", "error", "no path provided")
 			return
 		}
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "stopfile: infohash couldn't be parsed "+req.Data1)
 			return
@@ -600,7 +600,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 			_ = uc.SendMsg("resp", "error", "no path provided")
 			return
 		}
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "deletefilepath: infohash couldn't be parsed "+req.Data1)
 			return
@@ -612,7 +612,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		go DeleteFilePath(uc.Username, ih, req.Data2)
 		return
 	case "deletetorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "deletetorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -625,7 +625,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		uc.StopStream()
 		return
 	case "removetorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "removetorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -637,7 +637,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		go RemoveTorrent(uc.Username, ih)
 		return
 	case "abandontorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "abandontorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -677,7 +677,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		defer uc.Streamers.Dec()
 		defer uc.Stream.Unlock()
 
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentinfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -703,7 +703,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		Info.Println("Stopped gettorrentinfo for ", uc.Username)
 		return
 	case "listtorrentinfo":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "listtorrentinfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -718,7 +718,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		_ = uc.Send(GetTorrentInfo(ih))
 		return
 	case "gettorrentstats":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentstats: infohash couldn't be parsed "+req.Data1)
 			return
@@ -736,7 +736,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentinfostat":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentinfostat: infohash couldn't be parsed "+req.Data1)
 			return
@@ -754,7 +754,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentfiles":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentfiles: infohash couldn't be parsed "+req.Data1)
 			return
@@ -772,7 +772,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "getfsdirinfo":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "getfsdirinfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -790,7 +790,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "getfsfileinfo":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "getfsfileinfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -808,7 +808,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentfileinfo":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentfileinfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -826,7 +826,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentpiecestateruns":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentpiecestateruns: infohash couldn't be parsed "+req.Data1)
 			return
@@ -844,7 +844,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "istorrentlocked":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "istorrentlocked: infohash couldn't be parsed "+req.Data1)
 			return
@@ -861,7 +861,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		_ = uc.Send(ret)
 		return
 	case "toggletorrentlock":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "toggletorrentlock: infohash couldn't be parsed "+req.Data1)
 			return
@@ -891,7 +891,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "addtrackerstotorrent":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "addtrackerstotorrent: infohash couldn't be parsed "+req.Data1)
 			return
@@ -954,7 +954,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		_ = uc.Send(ret)
 		return
 	case "gettorrentknownswarm":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentknownswarm: infohash couldn't be parsed "+req.Data1)
 			return
@@ -972,7 +972,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentnumpieces":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentnumpieces: infohash couldn't be parsed "+req.Data1)
 			return
@@ -990,7 +990,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentmetainfo":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentmetainfo: infohash couldn't be parsed "+req.Data1)
 			return
@@ -1008,7 +1008,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		}
 		return
 	case "gettorrentpeerconns":
-		ih, err := MetafromHex(req.Data1)
+		ih, err := MetaFromHex(req.Data1)
 		if err != nil {
 			_ = uc.SendMsg("resp", "error", "gettorrentpeerconns: infohash couldn't be parsed "+req.Data1)
 			return

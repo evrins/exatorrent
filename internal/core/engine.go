@@ -32,8 +32,8 @@ type Eng struct {
 	TUDb      db.TorrentUserDb
 }
 
-// AddfromSpec Adds Torrent by Torrent Spec
-func AddfromSpec(User string, spec *torrent.TorrentSpec, dontstart bool, nofsdb bool) {
+// AddFromSpec Adds Torrent by Torrent Spec
+func AddFromSpec(User string, spec *torrent.TorrentSpec, dontstart bool, nofsdb bool) {
 	if spec == nil {
 		return
 	}
@@ -131,7 +131,7 @@ func AddfromSpec(User string, spec *torrent.TorrentSpec, dontstart bool, nofsdb 
 
 		if len(Engine.Econfig.GetOCU()) != 0 && notmerged {
 			Info.Println("Torrent Metainfo requested from Online Cache")
-			uspec, err := SpecfromURL(fmt.Sprintf(Engine.Econfig.GetOCU(), strings.TrimSpace(trnt.InfoHash().HexString())))
+			uspec, err := SpecFromURL(fmt.Sprintf(Engine.Econfig.GetOCU(), strings.TrimSpace(trnt.InfoHash().HexString())))
 			if err != nil {
 				Warn.Println(err)
 			} else {

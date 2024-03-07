@@ -87,7 +87,7 @@ func StreamFile(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	ih, err := MetafromHex(parts[3])
+	ih, err := MetaFromHex(parts[3])
 	if err != nil {
 		Warn.Println(err)
 		return

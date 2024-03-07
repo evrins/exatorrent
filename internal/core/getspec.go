@@ -13,12 +13,12 @@ import (
 	"github.com/anacrolix/torrent/metainfo"
 )
 
-// SpecfromURL Returns Torrent Spec from HTTP URL
-func SpecfromURL(torrentURL string) (spec *torrent.TorrentSpec, reterr error) {
+// SpecFromURL Returns Torrent Spec from HTTP URL
+func SpecFromURL(torrentURL string) (spec *torrent.TorrentSpec, reterr error) {
 	// TorrentSpecFromMetaInfo may panic if the info is malformed
 	defer func() {
 		if r := recover(); r != nil {
-			reterr = fmt.Errorf("SpecfromURL: error loading spec from URL")
+			reterr = fmt.Errorf("SpecFromURL: error loading spec from URL")
 		}
 		reterr = nil
 	}()
@@ -43,12 +43,12 @@ func SpecfromURL(torrentURL string) (spec *torrent.TorrentSpec, reterr error) {
 	return
 }
 
-// SpecfromPath Returns Torrent Spec from File Path
-func SpecfromPath(path string) (spec *torrent.TorrentSpec, reterr error) {
+// SpecFromPath Returns Torrent Spec from File Path
+func SpecFromPath(path string) (spec *torrent.TorrentSpec, reterr error) {
 	// TorrentSpecFromMetaInfo may panic if the info is malformed
 	defer func() {
 		if r := recover(); r != nil {
-			reterr = fmt.Errorf("SpecfromPath: error loading new torrent from file %s: %v+", path, r)
+			reterr = fmt.Errorf("SpecFromPath: error loading new torrent from file %s: %v+", path, r)
 		}
 	}()
 
@@ -73,12 +73,12 @@ func SpecfromPath(path string) (spec *torrent.TorrentSpec, reterr error) {
 	return
 }
 
-// SpecfromBytes Returns Torrent Spec from Bytes
-func SpecfromBytes(trnt []byte) (spec *torrent.TorrentSpec, reterr error) {
+// SpecFromBytes Returns Torrent Spec from Bytes
+func SpecFromBytes(trnt []byte) (spec *torrent.TorrentSpec, reterr error) {
 	// TorrentSpecFromMetaInfo may panic if the info is malformed
 	defer func() {
 		if r := recover(); r != nil {
-			reterr = fmt.Errorf("SpecfromBytes: error loading new torrent from bytes")
+			reterr = fmt.Errorf("SpecFromBytes: error loading new torrent from bytes")
 		}
 	}()
 	Info.Println("Getting Torrent Metainfo from Torrent Bytes")
@@ -90,17 +90,17 @@ func SpecfromBytes(trnt []byte) (spec *torrent.TorrentSpec, reterr error) {
 	return
 }
 
-// SpecfromB64String Returns Torrent Spec from Base64 Encoded Torrent File
-func SpecfromB64String(trnt string) (spec *torrent.TorrentSpec, reterr error) {
+// SpecFromB64String Returns Torrent Spec from Base64 Encoded Torrent File
+func SpecFromB64String(trnt string) (spec *torrent.TorrentSpec, reterr error) {
 	t, err := base64.StdEncoding.DecodeString(trnt)
 	if err != nil {
 		return nil, err
 	}
-	return SpecfromBytes(t)
+	return SpecFromBytes(t)
 }
 
-// MetafromHex returns metainfo.Hash from given infohash string
-func MetafromHex(infohash string) (h metainfo.Hash, err error) {
+// MetaFromHex returns metainfo.Hash from given infohash string
+func MetaFromHex(infohash string) (h metainfo.Hash, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("error parsing string to InfoHash")

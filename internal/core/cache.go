@@ -36,7 +36,7 @@ func RemMetaCache(ih metainfo.Hash) {
 }
 
 func GetMetaCache(ih metainfo.Hash) (spec *torrent.TorrentSpec, reterr error) {
-	return SpecfromPath(filepath.Join(Dirconfig.CacheDir, fmt.Sprintf("%s.torrent", ih.HexString())))
+	return SpecFromPath(filepath.Join(Dirconfig.CacheDir, fmt.Sprintf("%s.torrent", ih.HexString())))
 }
 
 func EmptyMetaCache() {
