@@ -115,16 +115,6 @@ func wshandler(uc *UserConn, req *ConReq) {
 	if uc.IsAdmin && req.Aop == 1 {
 		switch req.Command {
 		// parse these in normal block
-		case "abandontorrent":
-		case "removetorrent":
-		case "addtrackerstotorrent":
-		case "starttorrent":
-		case "stoptorrent":
-		case "startfile":
-		case "stopfile":
-		case "deletefilepath":
-		case "deletetorrent":
-		//
 		case "adduser":
 			if !(len(req.Data1) > 5 || len(req.Data2) > 5) {
 				_ = uc.SendMsg("resp", "error", "length of username and password must be more than 5")
