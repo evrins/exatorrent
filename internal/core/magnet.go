@@ -32,7 +32,7 @@ func AddMagnet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// hard coded here will remove user system
-	AddFromSpec("adminuser", spec, !req.AutoStart, false)
+	go AddFromSpec("adminuser", spec, !req.AutoStart, false)
 
 	var resp = Resp{
 		Type:     "resp",
