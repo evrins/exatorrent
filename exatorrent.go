@@ -16,7 +16,8 @@ func main() {
 
 	http.HandleFunc("GET /api/magnet", core.GetMagnet)
 	http.HandleFunc("POST /api/magnet", core.AddMagnet)
-	http.HandleFunc("DELETE /api/magnet", core.RemoveMagnet)
+	http.HandleFunc("DELETE /api/magnet", core.DeleteMagnet)
+
 	http.HandleFunc("/api/socket", core.SocketAPI)
 	http.HandleFunc("/api/auth", core.AuthCheck)
 	http.HandleFunc("/api/stream/", core.StreamFile)

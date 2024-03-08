@@ -63,6 +63,35 @@ func RemoveMagnet(w http.ResponseWriter, r *http.Request) {
 	var resp = Resp{
 		Type:  "resp",
 		State: "success",
+		Msg:   fmt.Sprintf("remove torrent %s successfully", req.Hash),
+	}
+	handleResponse(w, r, resp)
+}
+
+type DeleteMagnetRequest struct {
+	Hash string `json:"hash"`
+}
+
+func DeleteMagnet(w http.ResponseWriter, r *http.Request) {
+	var req DeleteMagnetRequest
+	var err = json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		handleError(w, r, err)
+	}
+
+	ih, err := MetaFromHex(req.Hash)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+	DeleteTorrent("adminuser", ih)
+	uc := MainHub.Get("adminuser")
+	if uc != nil {
+		uc.StopStream()
+	}
+	var resp = Resp{
+		Type:  "resp",
+		State: "success",
 		Msg:   fmt.Sprintf("delete torrent %s successfully", req.Hash),
 	}
 	handleResponse(w, r, resp)

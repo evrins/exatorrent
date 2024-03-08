@@ -30,6 +30,14 @@ func (h *Hub) Add(Uc *UserConn) {
 	Info.Printf("User %s (%s) Connected\n", Uc.Username, Uc.Conn.RemoteAddr().String())
 }
 
+func (h *Hub) Get(username string) *UserConn {
+	uc, ok := h.Conns[username]
+	if !ok {
+		return nil
+	}
+	return uc
+}
+
 func (h *Hub) SendMsg(User string, Type string, State string, Resp string) {
 	if User != "" {
 		conn, ok := h.Conns[User]
