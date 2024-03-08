@@ -105,7 +105,10 @@ func handleError(w http.ResponseWriter, r *http.Request, err error) {
 func handleResponse(w http.ResponseWriter, r *http.Request, resp Resp) {
 	var err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
-		slog.Info("fail to send response. err: %v", err)
+		slog.Error("fail to send response. err: %v", err)
+	}
+}
+
 func handleResponseBytes(w http.ResponseWriter, r *http.Request, buf []byte) {
 	var _, err = w.Write(buf)
 	if err != nil {
