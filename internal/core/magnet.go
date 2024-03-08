@@ -33,7 +33,7 @@ func AddMagnet(w http.ResponseWriter, r *http.Request) {
 		Type:     "resp",
 		State:    "success",
 		Infohash: spec.InfoHash.HexString(),
-		Msg:      "torrent spec added",
+		Msg:      "Torrent Spec Added",
 	}
 	handleResponse(w, r, resp)
 }

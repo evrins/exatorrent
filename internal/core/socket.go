@@ -500,7 +500,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		} else {
 			go AddFromSpec(uc.Username, tspec, false, false)
 		}
-		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "torrent spec added")
+		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "Torrent Spec Added")
 		return
 	case "addtorrent":
 		tspec, terr := SpecFromB64String(req.Data1)
@@ -513,7 +513,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		} else {
 			go AddFromSpec(uc.Username, tspec, false, false)
 		}
-		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "torrent spec added")
+		_ = uc.SendMsgU("resp", "success", tspec.InfoHash.HexString(), "Torrent Spec Added")
 		return
 	case "addinfohash":
 		ih, terr := MetaFromHex(req.Data1)
@@ -527,7 +527,7 @@ func wshandler(uc *UserConn, req *ConReq) {
 		} else {
 			go AddFromSpec(uc.Username, tspec, false, false)
 		}
-		_ = uc.SendMsgU("resp", "success", ih.HexString(), "torrent spec added")
+		_ = uc.SendMsgU("resp", "success", ih.HexString(), "Torrent Spec Added")
 		return
 	case "starttorrent":
 		ih, err := MetaFromHex(req.Data1)
