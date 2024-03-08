@@ -14,6 +14,7 @@ import (
 func main() {
 	core.Initialize()
 
+	http.HandleFunc("GET /api/magnet", core.GetMagnet)
 	http.HandleFunc("POST /api/magnet", core.AddMagnet)
 	http.HandleFunc("DELETE /api/magnet", core.RemoveMagnet)
 	http.HandleFunc("/api/socket", core.SocketAPI)
