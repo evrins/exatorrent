@@ -44,19 +44,19 @@ func AddFromSpec(User string, spec *torrent.TorrentSpec, dontstart bool, nofsdb 
 
 	Info.Println("Adding Torrent")
 	var trnt *torrent.Torrent
-	var new bool
+	var isNew bool
 	var err error
 
 	// Add Torrent to Bittorrent Client
 	if Engine.Torc != nil {
-		trnt, new, err = Engine.Torc.AddTorrentSpec(spec)
+		trnt, isNew, err = Engine.Torc.AddTorrentSpec(spec)
 		if err != nil {
 			Warn.Println("Error adding Torrent Spec", err)
 			MainHub.SendMsgU(User, "nfn", trnt.InfoHash().HexString(), "error", "Error adding Torrent Spec")
 			return
 		}
 
-		if !new {
+		if !isNew {
 			Info.Printf("Torrent %s is not new", spec.InfoHash)
 			MainHub.SendMsgU(User, "nfn", trnt.InfoHash().HexString(), "warning", "Torrent is not new")
 			if User != "" {
