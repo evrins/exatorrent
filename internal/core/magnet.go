@@ -99,10 +99,12 @@ func DeleteMagnet(w http.ResponseWriter, r *http.Request) {
 
 func handleError(w http.ResponseWriter, r *http.Request, err error) {
 	var resp = Resp{Type: "resp", State: "error", Msg: err.Error()}
+	w.Header().Set("Content-Type", "application/json")
 	handleResponse(w, r, resp)
 }
 
 func handleResponse(w http.ResponseWriter, r *http.Request, resp Resp) {
+	w.Header().Set("Content-Type", "application/json")
 	var err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
 		slog.Error("fail to send response. err: %v", err)
@@ -110,6 +112,7 @@ func handleResponse(w http.ResponseWriter, r *http.Request, resp Resp) {
 }
 
 func handleResponseBytes(w http.ResponseWriter, r *http.Request, buf []byte) {
+	w.Header().Set("Content-Type", "application/json")
 	var _, err = w.Write(buf)
 	if err != nil {
 		slog.Error("fail to send response. err: %v", err)

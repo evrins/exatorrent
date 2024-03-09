@@ -69,6 +69,7 @@ func AuthCheck(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(cmsg)
 	if err != nil {
 		return
