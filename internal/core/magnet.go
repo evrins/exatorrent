@@ -6,6 +6,7 @@ import (
 	"github.com/anacrolix/torrent"
 	"log/slog"
 	"net/http"
+	"path/filepath"
 )
 
 type AddMagnetRequest struct {
@@ -95,6 +96,18 @@ func DeleteMagnet(w http.ResponseWriter, r *http.Request) {
 		Msg:   fmt.Sprintf("delete torrent %s successfully", req.Hash),
 	}
 	handleResponse(w, r, resp)
+}
+
+func GetFsDirInfoApi(w http.ResponseWriter, r *http.Request) {
+	var hash = r.URL.Query().Get("hash")
+	var dir = r.URL.Query().Get("dir")
+
+	ih, err := MetaFromHex(hash)
+	if err != nil {
+		handleError(w, r, err)
+	}
+	var buf = GetFsDirInfo(ih, filepath.Clean(dir))
+	handleResponseBytes(w, r, buf)
 }
 
 func handleError(w http.ResponseWriter, r *http.Request, err error) {
