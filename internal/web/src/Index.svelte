@@ -15,11 +15,13 @@
   import File from './partials/File.svelte';
   import About from './partials/About.svelte';
   import User from './partials/User.svelte';
+  import Toasts from './partials/Toasts.svelte';
 </script>
 
 <svelte:head>
   <title>exatorrent</title>
-  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='mediumslateblue'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4' /></svg>" />
+  <link rel="icon"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='mediumslateblue'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4' /></svg>" />
 </svelte:head>
 
 {#if $isDisConnected === false && $slocation.pathname !== '/signin' && $slocation.pathname !== '/file'}
@@ -56,14 +58,18 @@
   </div>
 {/if}
 
+<Toasts />
+
 <style global lang="postcss">
-  body {
-    @apply bg-neutral-900;
-  }
-  .noHL {
-    -webkit-tap-highlight-color: transparent;
-  }
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+    body {
+        @apply bg-neutral-900;
+    }
+
+    .noHL {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
 </style>

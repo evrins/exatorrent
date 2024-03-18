@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { dontstart, Send, isAdmin } from './core';
+  import { dontstart, Send, isAdmin, addToast } from './core';
   import slocation from 'slocation';
+
+
   let ismetainfo = true;
   let torrentinput = '';
   let trntfilestring = '';
@@ -9,7 +11,7 @@
   let addfunc = () => {
     if (ismetainfo === true) {
       if (torrentinput === '') {
-        alert('Empty Input');
+        addToast({ message: 'Empty Input', type: 'error' });
         return;
       }
       if (torrentinput.startsWith('magnet:')) {
@@ -31,7 +33,7 @@
       }
     } else {
       if (trntfilestring === '') {
-        alert('File Invalid');
+        addToast({ message: 'File Invalid', type: 'error' });
         return;
       }
       console.log('Adding Torrent', trntfilestring, $dontstart);
@@ -49,6 +51,7 @@
       addfunc();
     }
   };
+
   function toggleismetainfo() {
     ismetainfo = !ismetainfo;
   }
@@ -56,7 +59,7 @@
   function readtrnt(e: Event) {
     let f = (e.target as HTMLInputElement).files[0];
     if (f.size > 20971520) {
-      alert('Error: Maximum Torrent File Size is 20MB');
+      addToast({ message: 'Error: Maximum Torrent File Size is 20MB', type: 'error' });
       return;
     }
     let reader = new FileReader();
@@ -88,28 +91,38 @@
             bind:value={torrentinput}
             on:keydown={entertoadd} />
         {:else}
-          <label class="bg-neutral-800 appearance-none rounded-md w-full flex-grow px-3 py-2  placeholder-neutral-500 text-neutral-200  focus:outline-none sm:text-sm">
+          <label
+            class="bg-neutral-800 appearance-none rounded-md w-full flex-grow px-3 py-2  placeholder-neutral-500 text-neutral-200  focus:outline-none sm:text-sm">
             <div class="text-neutral-200 flex">
-              <svg xmlns="http://www.w3.org/2000/svg" class="text-neutral-400 h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-neutral-400 h-6 w-6 mr-1" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
               </svg>
               Select a Torrent File
             </div>
-            <input accept=".torrent,application/x-bittorrent" bind:this={trntfileinput} on:change={(e) => readtrnt(e)} id="torrentfile" name="torrentfile" type="file" class="hidden" />
+            <input accept=".torrent,application/x-bittorrent" bind:this={trntfileinput} on:change={(e) => readtrnt(e)}
+                   id="torrentfile" name="torrentfile" type="file" class="hidden" />
           </label>
         {/if}
         <button type="button" class="focus:outline-none focus:text-green-500" on:click={toggleismetainfo}>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-400 my-2 mx-2 flex-grow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-400 my-2 mx-2 flex-grow" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
             {#if ismetainfo}
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
             {:else}
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
             {/if}
           </svg>
         </button>
       </div>
 
-      <button type="button" class="w-full my-2 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 focus:outline-none focus:ring-2" on:click={addfunc}> Add </button>
+      <button type="button"
+              class="w-full my-2 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 focus:outline-none focus:ring-2"
+              on:click={addfunc}> Add
+      </button>
     </div>
   </div>
 </div>
@@ -122,7 +135,8 @@
         slocation.goto('/torrents');
       }}>
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
       </svg>
       Torrents
     </button>
@@ -150,7 +164,8 @@
           slocation.goto('/users');
         }}>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
         Users
       </button>
@@ -160,7 +175,8 @@
           slocation.goto('/stats');
         }}>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
         </svg>
         Stats
       </button>

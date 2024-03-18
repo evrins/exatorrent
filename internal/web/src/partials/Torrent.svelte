@@ -13,7 +13,7 @@
     torrentfiles,
     fileviewpath,
     fileviewinfohash,
-    istrntlocked
+    istrntlocked, addToast
   } from './core';
   import slocation from 'slocation';
   import TorrentCard from './TorrentCard.svelte';
@@ -46,7 +46,7 @@
     trackerfilestring = '';
     let f = (e.target as HTMLInputElement).files[0];
     if (f.size > 20971520) {
-      alert('Error: Maximum Tracker File Size is 20MB');
+      addToast({ message: 'Error: Maximum Tracker File Size is 20MB', type: 'error' });
       return;
     }
     let reader = new FileReader();
@@ -210,7 +210,7 @@
         {/if}
 
         <button class="-mr-1 flex p-2 rounded-md bg-neutral-800 focus:outline-none flex-shrink-0 mx-1 noHL"
-             on:click={fileProgressaction}>
+                on:click={fileProgressaction}>
           {#if fileProgressOpen === true}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                  stroke="currentColor">

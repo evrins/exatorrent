@@ -1,6 +1,7 @@
 import { writable, get } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 import slocation from 'slocation';
+import Toast from './Toast.svelte';
 
 export interface DlObject {
   infohash: string;
@@ -46,6 +47,7 @@ interface DevInfo {
   goversion: string;
   startedat: string;
 }
+
 interface DevStats {
   cpucycles: number;
   diskfree: number;
@@ -184,7 +186,7 @@ let wonclosefn = () => {
 
 let werrorfn = () => {
   if (firsttimecon === false && location.pathname !== '/signin') {
-    alert('Error Connecting');
+    addToast({ message: 'Error Connecting', type: 'error' });
     return;
   }
   try {
@@ -196,7 +198,7 @@ let werrorfn = () => {
         if (res.status >= 200 && res.status <= 299) {
           return res.json();
         } else {
-          alert('Error Authenticating');
+          addToast({ message: 'Error Authenticating', type: 'error' });
           throw new Error('Error Authenticating');
         }
       })
@@ -241,7 +243,7 @@ export let Connect = () => {
   }
 
   if (!(un.length > 5) || !(pw.length > 5)) {
-    alert('Invalid Credentials');
+    addToast({ message: 'Invalid Credentials', type: 'error' });
     return;
   }
 
@@ -266,7 +268,7 @@ export let SocketHandler = (event: MessageEvent) => {
     case 'resp':
       if (!(msg == null)) {
         if (msg?.state === 'error' || msg?.state === 'success') {
-          alert(msg?.message);
+          addToast({ message: msg?.message, type: 'info' });
         }
         let rl = get(resplist);
         resplist.set({ has: true, data: [msg, ...rl?.data] as RespObject[] });
@@ -310,7 +312,10 @@ export let SocketHandler = (event: MessageEvent) => {
       break;
     case 'torrentinfostat':
       if (!(msg.data == null)) {
-        torctime.set({ addedat: new Date(msg.data?.AddedAt)?.toLocaleString(), startedat: new Date(msg.data?.StartedAt)?.toLocaleString() });
+        torctime.set({
+          addedat: new Date(msg.data?.AddedAt)?.toLocaleString(),
+          startedat: new Date(msg.data?.StartedAt)?.toLocaleString()
+        });
       } else {
         torctime.set({ addedat: '', startedat: '' });
       }
@@ -507,4 +512,41 @@ export let fileType = (filepath: string): string => {
     return 'audio';
   }
   return 'unknown';
+};
+
+// toasts
+export const toasts = writable([]);
+
+type ToastType = 'error' | 'info' | 'success';
+
+interface toast {
+  message: string;
+  type?: ToastType,
+  dismissible?: boolean;
+  timeout?: number;
+}
+
+export const addToast = (toast: toast) => {
+  // Create a unique ID so we can easily find/remove it
+  // if it is dismissible/has a timeout.
+  const id = Math.floor(Math.random() * 100000);
+
+  // Setup some sensible defaults for a toast.
+  const defaults: { id: number, type: ToastType, dismissible: boolean, timeout: number } = {
+    id,
+    type: 'info',
+    dismissible: true,
+    timeout: 3000
+  };
+
+  toast = { ...defaults, ...toast };
+  // Push the toast to the top of the list of toasts
+  toasts.update((all) => [toast, ...all]);
+
+  // If toast is dismissible, dismiss it after "timeout" amount of time.
+  if (toast.timeout) setTimeout(() => dismissToast(id), toast.timeout);
+};
+
+export const dismissToast = (id) => {
+  toasts.update((all) => all.filter((t) => t.id !== id));
 };
