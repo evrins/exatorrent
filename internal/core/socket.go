@@ -39,7 +39,7 @@ const (
 )
 
 func SocketAPI(w http.ResponseWriter, r *http.Request) {
-	username, usertype, _, err := authHelper(w, r)
+	username, usertype, sessionToken, err := authHelper(w, r)
 	if err != nil {
 		Warn.Printf("%s (%s)\n", err, r.RemoteAddr)
 		return
@@ -61,7 +61,7 @@ func SocketAPI(w http.ResponseWriter, r *http.Request) {
 	_ = conn.SetReadDeadline(time.Now().Add(pongWait))
 	conn.SetPongHandler(func(string) error { _ = conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 
-	Uc := NewUserConn(username, conn, admin)
+	Uc := NewUserConn(username, sessionToken, conn, admin)
 
 	// Ping Handler
 	go func() {

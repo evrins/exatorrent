@@ -511,9 +511,11 @@ type DiskUsageStat struct {
 }
 
 type UserConnMsg struct {
-	Username string    `json:"username"`
-	IsAdmin  bool      `json:"isadmin"`
-	Time     time.Time `json:"contime"`
+	Username   string    `json:"username"`
+	IsAdmin    bool      `json:"isadmin"`
+	Token      string    `json:"token"`
+	Time       time.Time `json:"contime"`
+	RemoteAddr string    `json:"remoteAddr"`
 }
 
 type Mutbool struct {

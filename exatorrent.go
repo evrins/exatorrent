@@ -19,6 +19,8 @@ func main() {
 	http.HandleFunc("DELETE /api/magnet", core.DeleteMagnet)
 	http.HandleFunc("GET /api/fs/dir", core.GetFsDirInfoApi)
 
+	http.HandleFunc("GET /api/users", core.ListUsers)
+
 	http.HandleFunc("/api/socket", core.SocketAPI)
 	http.HandleFunc("/api/auth", core.AuthCheck)
 	http.HandleFunc("/api/stream/", core.StreamFile)

@@ -15,65 +15,102 @@ import (
 // Hub
 type Hub struct {
 	sync.RWMutex
-	Conns map[string]*UserConn
+	Conns map[string]map[string]*UserConn // connection per user per session
 }
 
-func (h *Hub) Add(Uc *UserConn) {
-	conn, ok := h.Conns[Uc.Username]
-	if ok && conn != nil {
-		conn.Close()
+func (h *Hub) Add(uc *UserConn) {
+	var username = uc.Username
+	var token = uc.Token
+	conns, ok := h.Conns[username]
+	if ok {
+		conn, ok := conns[token]
+		if ok {
+			conn.Close()
+		}
+
+		h.Lock()
+		h.Conns[username][token] = uc
+		h.Unlock()
+	} else {
+		h.Lock()
+		h.Conns[username] = map[string]*UserConn{
+			uc.Token: uc,
+		}
+		h.Unlock()
 	}
-	h.Lock()
-	h.Conns[Uc.Username] = Uc
-	h.Unlock()
 
-	Info.Printf("User %s (%s) Connected\n", Uc.Username, Uc.Conn.RemoteAddr().String())
+	Info.Printf("User %s (%s) Connected\n", username, uc.Conn.RemoteAddr().String())
 }
 
-func (h *Hub) Get(username string) *UserConn {
-	uc, ok := h.Conns[username]
+func (h *Hub) Get(username string) map[string]*UserConn {
+	conns, ok := h.Conns[username]
 	if !ok {
 		return nil
 	}
-	return uc
+	return conns
+}
+
+func (h *Hub) StopStreamByUser(username string) {
+	conns, ok := h.Conns[username]
+	if !ok {
+		return
+	}
+
+	for _, conn := range conns {
+		conn.StopStream()
+	}
 }
 
 func (h *Hub) SendMsg(User string, Type string, State string, Resp string) {
-	if User != "" {
-		conn, ok := h.Conns[User]
-		if ok && conn != nil {
-			_ = conn.SendMsg(Type, State, Resp)
-		}
+	if User == "" {
+		return
+	}
+
+	conns, ok := h.Conns[User]
+	if !ok {
+		return
+	}
+
+	for _, conn := range conns {
+		_ = conn.SendMsg(Type, State, Resp)
 	}
 }
 
 func (h *Hub) SendMsgU(User string, Type string, Infohash string, State string, Resp string) {
-	if User != "" {
-		conn, ok := h.Conns[User]
-		if ok && conn != nil {
-			_ = conn.SendMsgU(Type, State, Infohash, Resp)
-		}
+	if User == "" {
+		return
+	}
+
+	conns, ok := h.Conns[User]
+	if !ok {
+		return
+	}
+
+	for _, conn := range conns {
+		_ = conn.SendMsgU(Type, State, Infohash, Resp)
 	}
 }
 
-func (h *Hub) Remove(Uc *UserConn) {
-	if Uc == nil {
+func (h *Hub) Remove(uc *UserConn) {
+	if uc == nil {
 		return
 	}
 	h.Lock()
 	defer h.Unlock()
-	conn, ok := h.Conns[Uc.Username]
-	if ok && conn != nil {
-		if conn.Time == Uc.Time {
-			delete(h.Conns, Uc.Username)
-			Info.Printf("User %s (%s) Disconnected\n", Uc.Username, Uc.Conn.RemoteAddr().String())
-		}
+	conns, ok := h.Conns[uc.Username]
+	if !ok {
+		return
 	}
+	delete(conns, uc.Token)
+	Info.Printf("User %s (%s) Disconnected\n", uc.Username, uc.Conn.RemoteAddr().String())
 }
 
 func (h *Hub) RemoveUser(Username string) {
-	conn, ok := h.Conns[Username]
-	if ok && conn != nil {
+	conns, ok := h.Conns[Username]
+	if !ok {
+		return
+	}
+	for _, conn := range conns {
 		conn.Close()
 	}
 }
@@ -82,14 +119,21 @@ func (h *Hub) ListUsers() (ret []byte) {
 	var userconnmsg []*UserConnMsg
 	h.Lock()
 	defer h.Unlock()
-	for name, user := range h.Conns {
-		var usermsg UserConnMsg
-		if user != nil {
-			usermsg.Username = name
-			usermsg.IsAdmin = user.IsAdmin
-			usermsg.Time = user.Time
+	for name, conns := range h.Conns {
+		if conns == nil {
+			continue
 		}
-		userconnmsg = append(userconnmsg, &usermsg)
+		for _, conn := range conns {
+			var usermsg UserConnMsg
+
+			usermsg.Username = name
+			usermsg.Token = conn.Token
+			usermsg.IsAdmin = conn.IsAdmin
+			usermsg.Time = conn.Time
+			usermsg.RemoteAddr = conn.Conn.RemoteAddr().String()
+
+			userconnmsg = append(userconnmsg, &usermsg)
+		}
 	}
 	ret, _ = json.Marshal(DataMsg{Type: "userconn", Data: userconnmsg})
 	return
@@ -97,13 +141,14 @@ func (h *Hub) ListUsers() (ret []byte) {
 
 var MainHub Hub = Hub{
 	RWMutex: sync.RWMutex{},
-	Conns:   make(map[string]*UserConn),
+	Conns:   make(map[string]map[string]*UserConn),
 }
 
 // UserConn
 type UserConn struct {
 	Sendmu    sync.Mutex
 	Username  string
+	Token     string
 	IsAdmin   bool
 	Time      time.Time
 	Conn      *websocket.Conn
@@ -111,9 +156,10 @@ type UserConn struct {
 	Streamers MutInt
 }
 
-func NewUserConn(Username string, Conn *websocket.Conn, IsAdmin bool) (uc *UserConn) {
+func NewUserConn(Username, token string, Conn *websocket.Conn, IsAdmin bool) (uc *UserConn) {
 	uc = &UserConn{
 		Username: Username,
+		Token:    token,
 		Conn:     Conn,
 		IsAdmin:  IsAdmin,
 		Time:     time.Now(),

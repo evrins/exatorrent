@@ -86,10 +86,8 @@ func DeleteMagnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	DeleteTorrent("adminuser", ih)
-	uc := MainHub.Get("adminuser")
-	if uc != nil {
-		uc.StopStream()
-	}
+	MainHub.StopStreamByUser("adminuser")
+
 	var resp = Resp{
 		Type:  "resp",
 		State: "success",
