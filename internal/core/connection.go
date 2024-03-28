@@ -208,6 +208,10 @@ func (uc *UserConn) Close() {
 	MainHub.Remove(uc)
 }
 
+var hc = http.Client{
+	Timeout: 10 * time.Second,
+}
+
 func sendPostReq(h metainfo.Hash, url string, name string) {
 	Info.Println("Torrent ", h, " has completed. Sending POST request to ", url)
 	postrequest := struct {
@@ -229,7 +233,7 @@ func sendPostReq(h metainfo.Hash, url string, name string) {
 		return
 	}
 
-	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+	resp, err := hc.Post(url, "application/json", bytes.NewBuffer(jsonData))
 
 	if err != nil {
 		Warn.Println("POST Request failed to Send. Hook failed")
