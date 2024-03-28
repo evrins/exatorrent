@@ -230,30 +230,38 @@ func StartTorrent(User string, infohash metainfo.Hash, nofsdb bool) {
 
 	if Engine.Econfig.GetListenC() {
 		go func() {
-			if _, ok := Engine.onCloseMap[infohash]; !ok {
-				Engine.onCloseMap[infohash] = &trnt.Complete
-				Info.Println("Listening for Completion of Torrent ", infohash)
-				<-trnt.Complete.On()
-				delete(Engine.onCloseMap, infohash)
-
-				_, err := Engine.TorDb.GetTorrent(infohash)
-				if err != nil {
-					Info.Println(infohash, " Removed")
-				} else {
-					Info.Println(infohash, " Completed")
-					if Engine.Econfig.GetNOC() {
-						MainHub.SendMsgU(User, "resp", infohash.HexString(), "success", "Torrent Completed")
-					}
-					hpu := Engine.Econfig.GetHPU()
-					if hpu != "" {
-						trntname := ""
-						if trnt != nil {
-							trntname = trnt.Name()
-						}
-						sendPostReq(infohash, hpu, trntname)
-					}
-				}
+			_, ok = Engine.onCloseMap[infohash]
+			if ok {
+				return
 			}
+
+			Engine.onCloseMap[infohash] = &trnt.Complete
+			Info.Println("Listening for Completion of Torrent ", infohash)
+			<-trnt.Complete.On()
+			delete(Engine.onCloseMap, infohash)
+
+			_, err = Engine.TorDb.GetTorrent(infohash)
+
+			if err != nil {
+				Info.Println(infohash, " Removed")
+				return
+			}
+
+			Info.Println(infohash, " Completed")
+			if Engine.Econfig.GetNOC() {
+				MainHub.SendMsgU(User, "resp", infohash.HexString(), "success", "Torrent Completed")
+			}
+
+			hpu := Engine.Econfig.GetHPU()
+			if hpu == "" {
+				return
+			}
+
+			trntname := ""
+			if trnt != nil {
+				trntname = trnt.Name()
+			}
+			sendPostReq(infohash, hpu, trntname)
 		}()
 	}
 }
