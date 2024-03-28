@@ -86,7 +86,6 @@ func DeleteMagnet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	DeleteTorrent("adminuser", ih)
-	MainHub.StopStreamByUser("adminuser")
 
 	var resp = Resp{
 		Type:  "resp",
