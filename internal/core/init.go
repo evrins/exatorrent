@@ -357,4 +357,10 @@ func Initialize() {
 	go UpdateTrackers()
 	go TorrentRoutine()
 
+	var nsqAddress = os.Getenv("NSQ_ADDRESS")
+	if nsqAddress == "" {
+		Warn.Println("NSQ_ADDRESS is empty. will not connect nsq")
+	} else {
+		InitEventProducer(nsqAddress)
+	}
 }

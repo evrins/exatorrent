@@ -41,6 +41,7 @@ func AddMagnet(w http.ResponseWriter, r *http.Request) {
 		Infohash: spec.InfoHash.HexString(),
 		Msg:      "Torrent Spec Added",
 	}
+	PublishEvent(spec.InfoHash.HexString(), Added)
 	handleResponse(w, r, resp)
 }
 

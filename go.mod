@@ -45,6 +45,7 @@ require (
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -64,6 +65,7 @@ require (
 	github.com/multiformats/go-multihash v0.2.3 // indirect
 	github.com/multiformats/go-varint v0.0.6 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
+	github.com/nsqio/go-nsq v1.1.0 // indirect
 	github.com/pion/datachannel v1.5.5 // indirect
 	github.com/pion/dtls/v2 v2.2.10 // indirect
 	github.com/pion/ice/v2 v2.3.14 // indirect

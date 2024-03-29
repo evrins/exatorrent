@@ -76,7 +76,31 @@ func (h *Hub) SendMsg(User string, Type string, State string, Resp string) {
 	}
 }
 
-func (h *Hub) SendMsgU(User string, Type string, Infohash string, State string, Resp string) {
+func (h *Hub) SendMsgU(User string, Type string, hash string, State string, resp string) {
+	var et = Empty
+	switch resp {
+	case "Torrent Spec Added":
+		et = Added
+	case "Torrent is Loaded":
+		et = Loaded
+	case "Torrent Started":
+		et = Started
+	case "Torrent Completed":
+		et = Completed
+	case "Torrent Stopped":
+		et = Stopped
+	case "Torrent Removed":
+		et = Removed
+	case "Torrent Deleted":
+		et = Deleted
+	default:
+		et = Empty
+	}
+
+	if et != Empty {
+		go PublishEvent(hash, et)
+	}
+
 	if User == "" {
 		return
 	}
@@ -87,7 +111,7 @@ func (h *Hub) SendMsgU(User string, Type string, Infohash string, State string, 
 	}
 
 	for _, conn := range conns {
-		_ = conn.SendMsgU(Type, State, Infohash, Resp)
+		_ = conn.SendMsgU(Type, State, hash, resp)
 	}
 }
 
@@ -174,8 +198,8 @@ func (uc *UserConn) SendMsg(Type string, State string, Msg string) (err error) {
 	return
 }
 
-func (uc *UserConn) SendMsgU(Type string, State string, Infohash string, Msg string) (err error) {
-	resp, _ := json.Marshal(Resp{Type: Type, State: State, Infohash: Infohash, Msg: Msg})
+func (uc *UserConn) SendMsgU(Type string, State string, hash string, msg string) (err error) {
+	resp, _ := json.Marshal(Resp{Type: Type, State: State, Infohash: hash, Msg: msg})
 	err = uc.Send(resp)
 	return
 }
